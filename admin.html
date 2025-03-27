@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard - RAVENCOINCASH</title>
+  <style>
+    body { background: #0f0f0f; color: #00ffc8; font-family: sans-serif; padding: 30px; text-align: center; }
+    h1 { margin-bottom: 10px; }
+    input, button { padding: 10px; margin: 10px; width: 80%; max-width: 400px; border-radius: 5px; border: none; }
+    button { background: #00ffc8; color: #000; font-weight: bold; cursor: pointer; }
+    code { display: block; background: #222; padding: 10px; margin-top: 10px; border-radius: 5px; }
+  </style>
+</head>
+<body>
+  <h1>RAVENCOINCASH Admin Dashboard</h1>
+
+  <h3>Your Wallet Address:</h3>
+  <code>REPGbdEU5chrhX5HDd9tG9zUV6Ra4n2ETJ</code>
+
+  <img src="https://api.qrserver.com/v1/create-qr-code/?data=REPGbdEU5chrhX5HDd9tG9zUV6Ra4n2ETJ&size=200x200"><br>
+
+  <hr>
+
+  <h2>Create a Sub-Asset</h2>
+  <input type="text" id="subAssetName" placeholder="e.g. FIRSTASSET">
+  <button onclick="generateSubAsset()">Generate Command</button>
+  <code id="subAssetCommand"></code>
+
+  <hr>
+
+  <h2>Create Airdrop Command</h2>
+  <input type="text" id="recipient" placeholder="Recipient's RVN Address">
+  <input type="text" id="amount" placeholder="Amount of RAVENCOINCASH">
+  <button onclick="generateAirdrop()">Generate Send Command</button>
+  <code id="airdropCommand"></code>
+
+  <script>
+    function generateSubAsset() {
+      const name = document.getElementById("subAssetName").value.trim();
+      if (name) {
+        const command = `issue "RAVENCOINCASH/${name.toUpperCase()}" 1000 0`;
+        document.getElementById("subAssetCommand").textContent = command;
+      }
+    }
+
+    function generateAirdrop() {
+      const to = document.getElementById("recipient").value.trim();
+      const amount = document.getElementById("amount").value.trim();
+      if (to && amount) {
+        const cmd = `transfer "RAVENCOINCASH" ${amount} "${to}"`;
+        document.getElementById("airdropCommand").textContent = cmd;
+      }
+    }
+  </script>
+</body>
+</html>
