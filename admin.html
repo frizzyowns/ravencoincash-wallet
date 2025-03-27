@@ -1,39 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Dashboard - RAVENCOINCASH</title>
+  <title>RAVENCOINCASH Admin Dashboard</title>
   <style>
-    body { background: #0f0f0f; color: #00ffc8; font-family: sans-serif; padding: 30px; text-align: center; }
-    h1 { margin-bottom: 10px; }
-    input, button { padding: 10px; margin: 10px; width: 80%; max-width: 400px; border-radius: 5px; border: none; }
-    button { background: #00ffc8; color: #000; font-weight: bold; cursor: pointer; }
-    code { display: block; background: #222; padding: 10px; margin-top: 10px; border-radius: 5px; }
+    body {
+      background: #0f0f0f;
+      color: #00ffc8;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background: #00ffc8;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    code {
+      display: block;
+      background: #222;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+    }
+    #dashboard {
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <h1>RAVENCOINCASH Admin Dashboard</h1>
 
-  <h3>Your Wallet Address:</h3>
-  <code>REPGbdEU5chrhX5HDd9tG9zUV6Ra4n2ETJ</code>
+  <div id="login">
+    <h2>Enter Admin Password</h2>
+    <input type="password" id="passwordInput" placeholder="Enter password">
+    <button onclick="checkPassword()">Login</button>
+    <p id="error" style="color:red;"></p>
+  </div>
 
-  <img src="https://api.qrserver.com/v1/create-qr-code/?data=REPGbdEU5chrhX5HDd9tG9zUV6Ra4n2ETJ&size=200x200"><br>
+  <div id="dashboard">
+    <h1>RAVENCOINCASH Admin Dashboard</h1>
 
-  <hr>
+    <h3>Your Wallet Address:</h3>
+    <code>REPGbdEU5chrhX5HDd9tG9zUV6Ra4n2ETJ</code>
 
-  <h2>Create a Sub-Asset</h2>
-  <input type="text" id="subAssetName" placeholder="e.g. FIRSTASSET">
-  <button onclick="generateSubAsset()">Generate Command</button>
-  <code id="subAssetCommand"></code>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?data=REPGbdEU5chrhX5HDd9tG9zUV6Ra4n2ETJ&size=200x200"><br><br>
 
-  <hr>
+    <h2>Create a Sub-Asset</h2>
+    <input type="text" id="subAssetName" placeholder="e.g. FIRSTASSET">
+    <button onclick="generateSubAsset()">Generate Command</button>
+    <code id="subAssetCommand"></code>
 
-  <h2>Create Airdrop Command</h2>
-  <input type="text" id="recipient" placeholder="Recipient's RVN Address">
-  <input type="text" id="amount" placeholder="Amount of RAVENCOINCASH">
-  <button onclick="generateAirdrop()">Generate Send Command</button>
-  <code id="airdropCommand"></code>
+    <hr>
+
+    <h2>Create Airdrop Command</h2>
+    <input type="text" id="recipient" placeholder="Recipient's RVN Address">
+    <input type="text" id="amount" placeholder="Amount of RAVENCOINCASH">
+    <button onclick="generateAirdrop()">Generate Send Command</button>
+    <code id="airdropCommand"></code>
+  </div>
 
   <script>
+    const correctPassword = "frizzyowns123";
+
+    function checkPassword() {
+      const input = document.getElementById("passwordInput").value;
+      if (input === correctPassword) {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+      } else {
+        document.getElementById("error").textContent = "Incorrect password.";
+      }
+    }
+
     function generateSubAsset() {
       const name = document.getElementById("subAssetName").value.trim();
       if (name) {
