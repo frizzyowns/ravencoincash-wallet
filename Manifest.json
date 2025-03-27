@@ -1,13 +1,13 @@
 {
-  "name": "RAVENCOINCASH Admin",
-  "short_name": "RCC Admin",
+  "name": "RAVENCOINCASH Wallet",
+  "short_name": "RCH",
   "start_url": "admin.html",
   "display": "standalone",
   "background_color": "#0f0f0f",
   "theme_color": "#00ffc8",
   "icons": [
     {
-      "src": "https://frizzyowns.github.io/ravencoincash-wallet/favicon.png",
+      "src": "favicon.png",
       "sizes": "192x192",
       "type": "image/png"
     }
