@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RAVENCOINCASH Wallet</title>
+  <style>
+    body { background: #0f0f0f; color: #00ffc8; font-family: sans-serif; text-align: center; padding: 20px; }
+    input, button { margin: 10px; padding: 10px; width: 90%; max-width: 400px; border: none; border-radius: 5px; }
+    button { background-color: #00ffc8; color: black; font-weight: bold; cursor: pointer; }
+    code, .output { background: #222; color: #0f0; padding: 10px; border-radius: 5px; margin-top: 10px; display: block; word-wrap: break-word; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>RAVENCOINCASH Wallet</h1>
+  <p>Enter your Ravencoin address or WIF private key to get started:</p>
+
+  <input type="text" id="walletInput" placeholder="Enter RVN address or WIF" />
+  <button onclick="loadWallet()">Load Wallet</button>
+
+  <div id="walletSection" class="hidden">
+    <h2>Wallet Address:</h2>
+    <code id="walletAddressDisplay"></code>
+
+    <h3>Asset to Send:</h3>
+    <input type="text" id="assetName" placeholder="e.g. RAVENCOINCASH/FIRSTASSET" />
+    <input type="text" id="recipient" placeholder="Recipient's RVN address" />
+    <input type="number" id="amount" placeholder="Amount to send" />
+    <button onclick="generateSendCommand()">Generate Send Command</button>
+
+    <div class="output" id="sendCommand"></div>
+  </div>
+
+  <script>
+    function loadWallet() {
+      const input = document.getElementById('walletInput').value.trim();
+      const isWIF = input.length > 50;
+      document.getElementById('walletSection').classList.remove('hidden');
+
+      const display = isWIF ? '***Private Key Loaded (WIF)***' : input;
+      document.getElementById('walletAddressDisplay').textContent = display;
+
+      // TODO: Add balance fetch using an explorer API
+    }
+
+    function generateSendCommand() {
+      const asset = document.getElementById('assetName').value.trim();
+      const to = document.getElementById('recipient').value.trim();
+      const amount = document.getElementById('amount').value.trim();
+
+      if (!asset || !to || !amount) {
+        document.getElementById('sendCommand').textContent = "Please fill all fields.";
+        return;
+      }
+
+      const cmd = `transfer "${asset}" ${amount} "${to}"`;
+      document.getElementById('sendCommand').textContent = cmd;
+    }
+  </script>
+</body>
+</html>
