@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RCH Atomic Swap Debug</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f0f0f;
+      color: #00ffc8;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #1c1c1c;
+      padding: 20px;
+      border-radius: 12px;
+    }
+    input, button {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 10px;
+      border: none;
+      background: #222;
+      color: #00ffc8;
+    }
+    button {
+      background: linear-gradient(to right, #00ffc8, #00aaff);
+      color: #111;
+      font-weight: bold;
+    }
+    .swap-card {
+      background: #121212;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+    }
+    .log-output {
+      background: #111;
+      color: #f66;
+      font-size: 13px;
+      padding: 10px;
+      border-radius: 10px;
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Atomic Swap Debug Mode</h1>
+
+<div class="container">
+  <input type="text" id="fromAmount" placeholder="Offering (e.g. 1000 RCH)">
+  <input type="text" id="toAmount" placeholder="Requesting (e.g. 1 RVN)">
+  <input type="text" id="yourAddress" placeholder="Your Wallet Address">
+  <button onclick="postSwap()">Post Swap Offer</button>
+</div>
+
+<div class="container">
+  <h2>Available Swaps</h2>
+  <div id="swapList">Loading swaps...</div>
+</div>
+
+<div class="container">
+  <h2>Debug Log</h2>
+  <div class="log-output" id="debugLog">Initializing Firebase...</div>
+</div>
+
+<script>
+  const debugLog = (msg) => {
+    const logBox = document.getElementById("debugLog");
+    logBox.textContent += "\n" + msg;
+  };
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDPP4hFpi9cf8HsfoPmtlrEPb31Ii9mNlk",
+    authDomain: "rch-alpha-wallet.firebaseapp.com",
+    databaseURL: "https://rch-alpha-wallet-default-rtdb.firebaseio.com",
+    projectId: "rch-alpha-wallet",
+    storageBucket: "rch-alpha-wallet.firebasestorage.app",
+    messagingSenderId: "871894306147",
+    appId: "1:871894306147:web:985b8d8c96d782fcdc1756",
+    measurementId: "G-REXMBRH1LF"
+  };
+
+  try {
+    firebase.initializeApp(firebaseConfig);
+    debugLog("Firebase initialized.");
+  } catch (e) {
+    debugLog("Firebase init error: " + e.message);
+  }
+
+  const db = firebase.database();
+
+  function postSwap() {
+    const from = document.getElementById('fromAmount').value;
+    const to = document.getElementById('toAmount').value;
+    const address = document.getElementById('yourAddress').value;
+
+    if (!from || !to || !address) {
+      alert("Fill all fields.");
+      return;
+    }
+
+    const newSwap = {
+      from,
+      to,
+      address,
+      timestamp: Date.now(),
+      status: "open"
+    };
+
+    db.ref("swaps").push(newSwap)
+      .then(() => debugLog("Swap posted successfully."))
+      .catch(err => debugLog("Error posting swap: " + err.message));
+  }
+
+  function loadSwaps() {
+    const swapList = document.getElementById('swapList');
+    db.ref("swaps").on("value",
+      snapshot => {
+        swapList.innerHTML = '';
+        let found = false;
+        snapshot.forEach(child => {
+          const data = child.val();
+          if (data.status === "open") {
+            const div = document.createElement("div");
+            div.className = "swap-card";
+            div.innerHTML = `
+              Offer: ${data.from}<br>
+              Wants: ${data.to}<br>
+              Wallet: ${data.address}<br>
+            `;
+            swapList.appendChild(div);
+            found = true;
+          }
+        });
+        if (!found) {
+          swapList.textContent = "No open swaps.";
+        }
+        debugLog("Swap data loaded.");
+      },
+      err => {
+        debugLog("Error reading swaps: " + err.message);
+      }
+    );
+  }
+
+  loadSwaps();
+</script>
+
+</body>
+</html>
