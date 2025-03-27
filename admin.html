@@ -1,39 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>RAVENCOINCASH Admin Dashboard</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RAVENCOINCASH Admin</title>
+  <link rel="manifest" href="manifest.json">
   <style>
-    body {
-      background: #0f0f0f;
-      color: #00ffc8;
-      font-family: sans-serif;
-      text-align: center;
-      padding: 30px;
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px;
-      width: 80%;
-      max-width: 400px;
-      border-radius: 5px;
-      border: none;
-    }
-    button {
-      background: #00ffc8;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    code {
-      display: block;
-      background: #222;
-      padding: 10px;
-      margin-top: 10px;
-      border-radius: 5px;
-    }
-    #dashboard {
-      display: none;
-    }
+    body { background: #0f0f0f; color: #00ffc8; font-family: sans-serif; text-align: center; padding: 30px; }
+    input, button { padding: 10px; margin: 10px; width: 80%; max-width: 400px; border-radius: 5px; border: none; }
+    button { background: #00ffc8; color: #000; font-weight: bold; cursor: pointer; }
+    code { display: block; background: #222; padding: 10px; margin-top: 10px; border-radius: 5px; word-wrap: break-word; }
+    .copy-btn { margin-top: 5px; background: #222; color: #00ffc8; border: 1px solid #00ffc8; }
+    #dashboard { display: none; }
   </style>
 </head>
 <body>
@@ -50,13 +28,13 @@
 
     <h3>Your Wallet Address:</h3>
     <code>REPGbdEU5chrhX5HDd9tG9zUV6Ra4n2ETJ</code>
-
     <img src="https://api.qrserver.com/v1/create-qr-code/?data=REPGbdEU5chrhX5HDd9tG9zUV6Ra4n2ETJ&size=200x200"><br><br>
 
     <h2>Create a Sub-Asset</h2>
     <input type="text" id="subAssetName" placeholder="e.g. FIRSTASSET">
     <button onclick="generateSubAsset()">Generate Command</button>
     <code id="subAssetCommand"></code>
+    <button class="copy-btn" onclick="copyToClipboard('subAssetCommand')">Copy Sub-Asset Command</button>
 
     <hr>
 
@@ -65,6 +43,7 @@
     <input type="text" id="amount" placeholder="Amount of RAVENCOINCASH">
     <button onclick="generateAirdrop()">Generate Send Command</button>
     <code id="airdropCommand"></code>
+    <button class="copy-btn" onclick="copyToClipboard('airdropCommand')">Copy Airdrop Command</button>
   </div>
 
   <script>
@@ -95,6 +74,18 @@
         const cmd = `transfer "RAVENCOINCASH" ${amount} "${to}"`;
         document.getElementById("airdropCommand").textContent = cmd;
       }
+    }
+
+    function copyToClipboard(id) {
+      const text = document.getElementById(id).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Copied to clipboard!");
+      });
+    }
+
+    // Register service worker for installable app
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
     }
   </script>
 </body>
