@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Check bitcoinjs-lib Load</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bitcoinjs-lib/6.1.0/bitcoinjs-lib.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
+    .status { font-size: 18px; margin-bottom: 20px; }
+    .success { color: #0f0; }
+    .fail { color: #f00; }
+    pre { background: #222; color: #0f0; padding: 12px; font-size: 14px; height: 150px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+
+<h1>bitcoinjs-lib Load Test</h1>
+<div id="status" class="status">Checking library status...</div>
+<pre id="debugLog">[Debug Output]</pre>
+
+<script>
+  function log(msg) {
+    const log = document.getElementById("debugLog");
+    log.textContent += "\n" + msg;
+    log.scrollTop = log.scrollHeight;
+  }
+
+  try {
+    if (window.bitcoinjs && bitcoinjs.ECPair) {
+      document.getElementById("status").innerHTML = "✅ bitcoinjs-lib loaded successfully.";
+      document.getElementById("status").classList.add("success");
+      log("bitcoinjs.ECPair is present. Library is working.");
+    } else {
+      document.getElementById("status").innerHTML = "❌ bitcoinjs-lib is missing or failed to load.";
+      document.getElementById("status").classList.add("fail");
+      log("Library object missing.");
+    }
+  } catch (e) {
+    document.getElementById("status").innerHTML = "❌ bitcoinjs-lib failed: " + e;
+    document.getElementById("status").classList.add("fail");
+    log("Error: " + e);
+  }
+</script>
+
+</body>
+</html>
