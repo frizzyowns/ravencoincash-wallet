@@ -1,0 +1,33 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Debug Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
+    button { padding: 12px; font-size: 18px; background: #00ffc8; border: none; color: #000; margin: 10px 0; }
+    pre { background: #222; color: #0f0; padding: 12px; font-size: 14px; height: 150px; overflow-y: auto; }
+  </style>
+</head>
+<body>
+
+<h1>JavaScript Debug Test</h1>
+<button onclick="logClick('Button 1 clicked')">Button 1</button>
+<button onclick="logClick('Button 2 clicked')">Button 2</button>
+
+<pre id="debugLog">[Debug Output]</pre>
+
+<script>
+  function logClick(msg) {
+    const log = document.getElementById("debugLog");
+    log.textContent += "\n" + msg;
+    log.scrollTop = log.scrollHeight;
+  }
+
+  logClick("JavaScript loaded and running.");
+</script>
+
+</body>
+</html>
